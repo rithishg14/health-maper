@@ -1,1 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Health Map - Epidemic Spread Visualizer</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+        }
+
+        header {
+            background-color: #d32f2f;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        #map {
+            height: 90vh;
+            width: 100%;
+        }
+
+        .legend {
+            background: white;
+            padding: 10px;
+            line-height: 1.5;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2>🌍 Health Map - Epidemic Spread Visualizer</h2>
+</header>
+
+<div id="map"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    // Initialize map
+    var map = L.map('map').setView([20, 0], 2);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Sample epidemic data
+    var epidemicData = [
+        { location: "New York, USA", lat: 40.7128, lng: -74.0060, cases: 5000 },
+        { location: "London, UK", lat: 51.5074, lng: -0.1278, cases: 3200 },
+        { location: "Delhi, India", lat: 28.7041, lng: 77.1025, cases: 8000 },
+        { location: "Tokyo, Japan", lat: 35.6762, lng: 139.6503, cases: 2700 },
+        { location: "Sydney, Australia", lat: -33.8688, lng: 151.2093, cases: 1500 }
+	
+    ];
+
+    // Function to determine circle color
+    function getColor(cases) {
+        return cases > 7000 ? '#b71c1c' :
+               cases > 4000 ? '#e53935' :
+               cases > 2000 ? '#fb8c00' :
+                              '#43a047';
+    }
+
+    // Add circles to map
+    epidemicData.forEach(function(data) {
+        L.circle([data.lat, data.lng], {
+            color: getColor(data.cases),
+            fillColor: getColor(data.cases),
+            fillOpacity: 0.6,
+            radius: data.cases * 5
+        }).addTo(map)
+          .bindPopup("<b>Location:</b> " + data.location +
+                     "<br><b>Cases:</b> " + data.cases);
+    });
+
+</script>
+
+</body>
+</html>
